@@ -1,11 +1,3 @@
-/*
- * TF2 PONG
- *
- * This is a silly little project I made to learn about LibGDX.
- * TF2 is copyright of Valve software. I do not own the rights to
- * it.
- */
-
 package net.ashtoncross.www;
 
 import com.badlogic.gdx.*;
