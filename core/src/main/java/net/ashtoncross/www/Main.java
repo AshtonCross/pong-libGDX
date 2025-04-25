@@ -43,11 +43,9 @@ public class Main implements ApplicationListener {
 
     @Override
     public void render() {
-
         input(); // process inputs for paddles
         logic(); // process ball
         draw(); // draw
-
     }
 
     private void input() {
@@ -65,20 +63,31 @@ public class Main implements ApplicationListener {
         // stop paddles from leaving window
         float height = viewport.getWorldHeight();
         leftPaddle.setY(MathUtils.clamp(leftPaddle.getY(), 0, height - Paddle.paddleHeight));
+        leftPaddle.update();
         rightPaddle.setY(MathUtils.clamp(rightPaddle.getY(), 0, height - Paddle.paddleHeight));
+        rightPaddle.update();
 
         // TODO: if ball X is < 0 or > width, do score stuff.
 
         // ball bounces off top and bottom
         if (ball.getY() > height - 1 || ball.getY() < 0) {
             //ball.setY(MathUtils.clamp(ball.getX(), 0, height - 1));
-            ball.velocity.y *= -1;
+            ball.velocity.y *= -1.1f;
         }
 
         // ball collisions with paddles
-        if (ball.hitbox.overlaps(leftPaddle.hitbox) || ball.hitbox.overlaps(rightPaddle.hitbox)) {
-            ball.velocity.x *= -1;
+        if (ball.hitbox.overlaps(leftPaddle.hitbox)) {
+            leftPaddle.bump(-0.2f);
+            ball.velocity.x *= -1.1f;
         }
+
+        if (ball.hitbox.overlaps(rightPaddle.hitbox)) {
+            rightPaddle.bump(0.2f);
+            ball.velocity.x *= -1.1f;
+        }
+
+        // out of bounds
+
 
         ball.update();
     }

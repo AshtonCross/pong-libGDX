@@ -10,10 +10,16 @@ public class Paddle {
     public ShapeRenderer shape;
     public static final float paddleWidth = 0.3f;
     public static final float paddleHeight = 6;
+    public boolean isBumped;
+    public float bumpWait;
+    public float originalX;
 
     public Paddle(float x, float y) {
         hitbox = new Rectangle(x, y, paddleWidth, paddleHeight);
+        originalX = x;
         shape = new ShapeRenderer();
+        isBumped = false;
+        bumpWait = 0;
     }
 
     public void moveUp() {
@@ -28,6 +34,18 @@ public class Paddle {
         final float speed = 25f;
         final float delta = Gdx.graphics.getDeltaTime();
         hitbox.setY(hitbox.getY() + (speed * direction * delta) );
+    }
+
+    public void update() {
+        if (!isBumped)
+            return;
+
+        bumpWait += Gdx.graphics.getDeltaTime();
+        if (bumpWait > 0.05f) {
+            bumpWait = 0;
+            isBumped = false;
+            hitbox.x = originalX;
+        }
     }
 
     public void render(Matrix4 matrix) {
@@ -52,5 +70,10 @@ public class Paddle {
 
     public float getY() {
         return hitbox.getY();
+    }
+
+    public void bump(float offset) {
+        isBumped = true;
+        hitbox.x += offset;
     }
 }
